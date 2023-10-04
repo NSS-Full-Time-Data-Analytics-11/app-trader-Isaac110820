@@ -89,7 +89,6 @@ UNION ALL
 					FROM play_store_apps
 					WHERE price::money::decimal <= 2.50 
 					  	  AND ROUND(rating*4)/4 = 5.0))
-
 -- Of the most profitable apps that are only listed on one platform, we will take the two with the most reviews
 -- Select everything from the CTE and also calculate total revenue and total profit
 SELECT name,
@@ -99,17 +98,13 @@ SELECT name,
  	   -- Calculate total_profit (total revenue - purchase price)
  	   (5000 * longevity) - purchase_price AS total_profit
 FROM both_tables
+WHERE name NOT IN (SELECT name
+			   FROM play_store_apps
+			   INTERSECT
+			   SELECT name
+			   FROM app_store_apps)
 ORDER BY review_count DESC
 LIMIT 2)
-
-
-
-
-
-
-
-
-
 
 
 
